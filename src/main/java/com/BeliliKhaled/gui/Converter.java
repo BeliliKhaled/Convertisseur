@@ -12,6 +12,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.geometry.Pos;
+import java.io.IOException;
 
 public class Converter extends Application {
     private ToggleGroup group, group2;
@@ -29,13 +31,14 @@ public class Converter extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Convertisseur de devises EUR/USD/GBD");
         Group root= new Group();
-        Scene scene = new Scene(root,400,300,Color.ANTIQUEWHITE);
+
+        Scene scene = new Scene(root,380,310,Color.BISQUE);
         TextField numberFrom = new TextField();
-        numberFrom.setPrefSize(100, 15);
+        numberFrom.setPrefSize(120, 15);
 
         TextField numberTo = new TextField();
         numberTo.setDisable(true);
-        numberTo.setPrefSize(100, 15);
+        numberTo.setPrefSize(120, 15);
 
 
         group=new ToggleGroup();
@@ -51,7 +54,7 @@ public class Converter extends Application {
         usd.setSelected(true);
         vBox1 = new VBox(20, numberFrom, eur, usd, gbd);
         vBox1.setLayoutX(50);
-        vBox1.setLayoutY(50);
+        vBox1.setLayoutY(40);
 
         group2=new ToggleGroup();
         eur2=new RadioButton("EUR");
@@ -66,12 +69,13 @@ public class Converter extends Application {
         usd2.setSelected(true);
         vBox2 = new VBox(20, numberTo, eur2, usd2, gbd2);
         vBox2.setLayoutX(210);
-        vBox2.setLayoutY(50);
+        vBox2.setLayoutY(40);
+        vBox2.setAlignment(Pos.TOP_RIGHT);
 
         Button calcul = new Button();
         calcul.setText("CONVERSION");
-        calcul.setLayoutX(125);
-        calcul.setLayoutY(225);
+        calcul.setLayoutX(140);
+        calcul.setLayoutY(215);
         calcul.setPrefSize(100, 30);
 
         calcul.setOnAction(new EventHandler<ActionEvent>() {
@@ -84,14 +88,29 @@ public class Converter extends Application {
         root.getChildren().add(vBox2);
         root.getChildren().add(calcul);
         primaryStage.setScene(scene);
+        primaryStage.setMaxHeight(310);
+        primaryStage.setMaxWidth(390);
         primaryStage.show();
 
     }
 
+    private String calcul(Unit fromMoney, Unit toMoney,String value){
 
-    private String calcul(Unit fromMoney, Unit toMoney,String value)
-    {
-        return String.valueOf(Integer.parseInt(value)*fromMoney.multiplier/toMoney.multiplier);
+        try{
+            String result = String.valueOf(Double.parseDouble(value) * fromMoney.multiplier / toMoney.multiplier);
+            try
+            {
+                return result.substring(0, result.indexOf(".") + 3);
+            }
+            catch (Throwable t)
+            {
+                return result;
+            }
+        }
+        catch (Throwable t)
+        {
+            return "Invalide Number";
+        }
     }
 
 }
