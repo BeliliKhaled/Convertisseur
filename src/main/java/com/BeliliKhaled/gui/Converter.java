@@ -13,9 +13,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
-import java.io.IOException;
 
 public class Converter extends Application {
+
     private ToggleGroup group, group2;
     private RadioButton eur, usd, gbd, eur2, gbd2, usd2;
     private VBox vBox1, vBox2;
@@ -29,22 +29,23 @@ public class Converter extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Convertisseur de devises EUR/USD/GBD");
+        primaryStage.setTitle("Convertisseur devises EUR/USD/GBD");
         Group root= new Group();
 
-        Scene scene = new Scene(root,380,310,Color.BISQUE);
+        Scene scene = new Scene(root,380,310,Color.CORAL);
         TextField numberFrom = new TextField();
         numberFrom.setPrefSize(120, 15);
 
+        //Text Box
         TextField numberTo = new TextField();
         numberTo.setDisable(true);
         numberTo.setPrefSize(120, 15);
 
-
+        //RadioGroup
         group=new ToggleGroup();
-        eur=new RadioButton("EUR");
-        usd=new RadioButton("USD");
-        gbd=new RadioButton("GBD");
+        eur=new RadioButton(unitEUR.symbol);
+        usd=new RadioButton(unitUSD.symbol);
+        gbd=new RadioButton(unitGBD.symbol);
         eur.setUserData(unitEUR);
         usd.setUserData(unitUSD);
         gbd.setUserData(unitGBD);
@@ -52,14 +53,17 @@ public class Converter extends Application {
         usd.setToggleGroup(group);
         gbd.setToggleGroup(group);
         usd.setSelected(true);
+
+        //Box vertical
         vBox1 = new VBox(20, numberFrom, eur, usd, gbd);
         vBox1.setLayoutX(50);
         vBox1.setLayoutY(40);
 
+        //RadioGroup2
         group2=new ToggleGroup();
-        eur2=new RadioButton("EUR");
-        usd2=new RadioButton("USD");
-        gbd2=new RadioButton("GBD");
+        eur2=new RadioButton(unitEUR.symbol);
+        usd2=new RadioButton(unitUSD.symbol);
+        gbd2=new RadioButton(unitGBD.symbol);
         eur2.setUserData(unitEUR);
         usd2.setUserData(unitUSD);
         gbd2.setUserData(unitGBD);
@@ -67,22 +71,27 @@ public class Converter extends Application {
         usd2.setToggleGroup(group2);
         gbd2.setToggleGroup(group2);
         usd2.setSelected(true);
+
+        //Box Vertical 2
         vBox2 = new VBox(20, numberTo, eur2, usd2, gbd2);
         vBox2.setLayoutX(210);
         vBox2.setLayoutY(40);
         vBox2.setAlignment(Pos.TOP_RIGHT);
 
+        //bouton Calcul
         Button calcul = new Button();
         calcul.setText("CONVERSION");
         calcul.setLayoutX(140);
         calcul.setLayoutY(215);
         calcul.setPrefSize(100, 30);
 
+        //Action de bouton
         calcul.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
-                numberTo.setText(calcul((Unit) group.getSelectedToggle().getUserData(), (Unit) group2.getSelectedToggle().getUserData(), numberFrom.getText()));
+                    numberTo.setText(calcul((Unit) group.getSelectedToggle().getUserData(), (Unit) group2.getSelectedToggle().getUserData(), numberFrom.getText()));
             }
         });
+
 
         root.getChildren().add(vBox1);
         root.getChildren().add(vBox2);
@@ -91,12 +100,14 @@ public class Converter extends Application {
         primaryStage.setMaxHeight(310);
         primaryStage.setMaxWidth(390);
         primaryStage.show();
-
     }
 
+    //methode de conversion
     private String calcul(Unit fromMoney, Unit toMoney,String value){
 
         try{
+            if(value.length()==0)
+                return "";
             String result = String.valueOf(Double.parseDouble(value) * fromMoney.multiplier / toMoney.multiplier);
             try
             {
