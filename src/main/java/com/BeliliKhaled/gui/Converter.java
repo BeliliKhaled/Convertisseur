@@ -14,7 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
 
-public class Converter extends Application {
+public class Converter extends Application{
 
     private ToggleGroup group, group2;
     private RadioButton eur, usd, gbd, eur2, gbd2, usd2;
